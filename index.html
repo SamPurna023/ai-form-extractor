@@ -1,14 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Form Extractor</title>
+    <link rel="stylesheet" href="styles.css">
     <script src="script.js" defer></script>
 </head>
+
 <body>
-    <input type="file" id="fileInput" accept="image/*">
-    <button id="uploadBtn">Extract Data</button>
-    <pre id="result"></pre>
+    <main class="app-shell">
+        <header class="topbar">
+            <div class="brand">
+                <div class="brand-mark" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 16v-9"></path>
+                        <path d="M8 11l4-4 4 4"></path>
+                        <path d="M20 16.5a4.5 4.5 0 0 1-4.5 4.5h-7A4.5 4.5 0 0 1 4 16.5"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h1>Form Extractor</h1>
+                    <p>Upload a form image and extract data automatically</p>
+                </div>
+            </div>
+            <div class="toolbar">
+                <button class="button ghost" id="clearAllBtn" type="button">Clear All</button>
+            </div>
+        </header>
+
+        <section class="content-grid">
+            <div class="panel">
+                <div class="panel-inner">
+                    <div class="section-title">
+                        <h2>1. Upload Form Image</h2>
+                    </div>
+
+                    <div class="upload-zone" id="dropZone">
+                        <div class="upload-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                        </div>
+
+                        <p>Drag & drop an image here</p>
+                        <p class="hint">or</p>
+
+                        <label class="file-picker" for="fileInput">Choose File</label>
+                        <input type="file" id="fileInput" accept="image/*">
+
+                        <div class="selected-file hidden" id="selectedFileWrap">
+                            <span aria-hidden="true">◌</span>
+                            <span id="selectedFileName"></span>
+                        </div>
+
+                        <div class="preview-wrap">
+                            <p class="preview-label">Preview:</p>
+                            <div class="preview-box empty" id="previewBox">
+                                No preview yet
+                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <button class="button primary" id="uploadBtn" type="button">Extract Data</button>
+                            <div class="meta-line">Supported formats: JPG, PNG, JPEG</div>
+                        </div>
+
+                        <div class="message" id="message"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-inner">
+                    <div class="results-header">
+                        <div>
+                            <h2>2. Extracted Information</h2>
+                        </div>
+                        <span class="status-badge success hidden" id="statusBadge">
+                            <span aria-hidden="true">✓</span>
+                            <span id="statusText">Extraction Complete</span>
+                        </span>
+                    </div>
+
+                    <div class="results-actions">
+                        <button class="button ghost" id="copyJsonBtn" type="button" disabled>Copy JSON</button>
+                        <button class="button primary" id="downloadJsonBtn" type="button" disabled>Download
+                            JSON</button>
+                    </div>
+
+                    <div style="height: 18px;"></div>
+
+                    <div class="results-card" id="resultsCard">
+                        <div class="row">
+                            <div class="label"><span class="field-icon" aria-hidden="true">👤</span>Full Name</div>
+                            <div class="value" id="nameValue">-</div>
+                        </div>
+                        <div class="row">
+                            <div class="label"><span class="field-icon" aria-hidden="true">✉</span>Email</div>
+                            <div class="value" id="emailValue">-</div>
+                        </div>
+                        <div class="row">
+                            <div class="label"><span class="field-icon" aria-hidden="true">☎</span>Phone</div>
+                            <div class="value" id="phoneValue">-</div>
+                        </div>
+                        <div class="row">
+                            <div class="label"><span class="field-icon" aria-hidden="true">📅</span>Date of Birth</div>
+                            <div class="value" id="dobValue">-</div>
+                        </div>
+                        <div class="row">
+                            <div class="label"><span class="field-icon" aria-hidden="true">⚥</span>Gender</div>
+                            <div class="value" id="genderValue">-</div>
+                        </div>
+                        <div class="row">
+                            <div class="label"><span class="field-icon" aria-hidden="true">🎓</span>Course</div>
+                            <div class="value" id="courseValue">-</div>
+                        </div>
+                        <div class="row">
+                            <div class="label"><span class="field-icon" aria-hidden="true">1️⃣</span>Year</div>
+                            <div class="value" id="yearValue">-</div>
+                        </div>
+                        <div class="row">
+                            <div class="label"><span class="field-icon" aria-hidden="true">#</span>Roll Number</div>
+                            <div class="value" id="rollNumberValue">-</div>
+                        </div>
+                    </div>
+
+                    <div class="json-panel">
+                        <h3>Raw JSON Output</h3>
+                        <pre id="jsonOutput">{}</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 </body>
+
 </html>
