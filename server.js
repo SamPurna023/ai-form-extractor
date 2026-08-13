@@ -15,6 +15,8 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
+const FormEntry = require("./formSchema");
+
 function stripCodeFences(text) {
   return text.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "").trim();
 }
@@ -64,15 +66,32 @@ app.post("/extract", upload.single("image"), async (req, res) => {
       },
     ]);
 
-    const data = parseModelJson(result.response.text());
-    res.json(data);
+    const text = result.response.text();
+    const data = JSON.parse(text);
+
+    const newEntry = new FormEntry({
+      name: data.name || data.fullName || "",
+      email: data.email || "",
+      phone: data.phone || data.mobile || "",
+      dob: data.dob || data.dateOfBirth || "",
+      gender: data.gender || "",
+      course: data.course || data.program || "",
+      year: data.year || "",
+      rollNumber: data.rollNumber || data["roll number"] || data.roll_number || "",
+    });
+
+    await newEntry.save();
+
+    try {
+      fs.unlinkSync(req.file.path);
+    } catch (e) {}
+
+    res.json(newEntry);
+
   } catch (error) {
     console.error("Error extracting data:", error);
     res.status(500).json({ error: "Failed to extract data" });
-  } finally {
-    if (req.file && req.file.path) {
-      fs.unlink(req.file.path, () => { });
-    }
+    
   }
 });
 
